@@ -35,15 +35,15 @@ def modules = params.modules.clone()
 // TO DO -- define options for the processes below
 def proactiv_options    = modules['proActiv']
 
-include { PROACTIV              } from './modules/local/process/proactiv'                 addParams( options: proactiv_options          )
-include { GET_SOFTWARE_VERSIONS } from './modules/local/process/get_software_versions' addParams( options: [publish_files : ['csv':'']] )
+include { PROACTIV              } from './modules/process/proactiv'              addParams( options: proactiv_options             )
+//include { GET_SOFTWARE_VERSIONS } from './modules/process/get_software_versions' addParams( options: [publish_files : ['csv':'']] )
 
 ////////////////////////////////////////////////////
 /* --           RUN MAIN WORKFLOW              -- */
 ////////////////////////////////////////////////////
 
 workflow ALTERNATIVE_PROMOTERS{
-
+         PROACTIV ( ch_input )
     }
 
 ////////////////////////////////////////////////////

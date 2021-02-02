@@ -25,15 +25,15 @@ if (params.help) {
 ////////////////////////////////////////////////////
 
 // Check that conda channels are set-up correctly
-if (params.enable_conda) {
-    Checks.check_conda_channels(log)
-}
+//if (params.enable_conda) {
+//    Checks.check_conda_channels(log)
+//}
 
 // Check AWS batch settings
-Checks.aws_batch(workflow, params)
+//Checks.aws_batch(workflow, params)
 
 // Check the hostnames against configured profiles
-Checks.hostname(workflow, params, log)
+//Checks.hostname(workflow, params, log)
 
 ////////////////////////////////////////////////////
 /* --           RUN MAIN WORKFLOW              -- */
@@ -43,7 +43,7 @@ workflow {
     /*
      * SUBWORKFLOW: Run main ICGC alternative promoter analysis pipeline
      */
-    include { ALTERNATIVE_PROMOTERS } from './alternative_promoters' addParams( summary_params: summary_params )
+    include { ALTERNATIVE_PROMOTERS } from './alternative_promoters' addParams( [:] )
     ALTERNATIVE_PROMOTERS ()
 }
 
