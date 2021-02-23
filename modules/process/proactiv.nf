@@ -6,7 +6,6 @@ params.multiqc_label = ''
 def options          = initOptions(params.options)
 
 process PROACTIV {
-    echo true
     label "process_medium"
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,

@@ -43,7 +43,6 @@ result <- result[complete.cases(assays(result)$promoterCounts),]
 result_tab <- rowData(result)
 str(result_tab)
 result_tab$txId <- sapply(result_tab$txId,paste,collapse=";")
-print(result_tab)
 countData <- data.frame(assays(result)$promoterCounts, result_tab)
 write.table(countData, file = "proActiv_count.csv",
             sep = "\t", quote = FALSE, row.names = FALSE)
