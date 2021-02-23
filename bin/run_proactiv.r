@@ -6,10 +6,10 @@
 ################################################
 ################################################
 
-## TRANSCRIPT ISOFORM DISCOVERY AND QUANTIFICATION
-## - ALIGNED READS IN BAM FILE FORMAT
-## - ANNOTATION GTF FILE
-## - THE PACKAGES BELOW NEED TO BE AVAILABLE TO LOAD WHEN RUNNING R
+## Estimation of Promoter Activity from RNA-Seq data
+## - ALIGNED READS IN STAR JUNCTION FILE FORMAT
+## - ANNOTATION GTF FILE (optional)
+## - THE PACKAGE BELOW NEED TO BE AVAILABLE TO LOAD WHEN RUNNING R
 
 ################################################
 ################################################
@@ -17,7 +17,6 @@
 ################################################
 ################################################
 library(proActiv)
-library(DEXSeq)
 
 ################################################
 ################################################
@@ -43,24 +42,4 @@ result <- proActiv(files = files, condition = condition,
 result <- result[complete.cases(assays(result)$promoterCounts),]
 countData <- data.frame(assays(result)$promoterCounts, rowData(result))
 write.table(countData, file = "proActiv_count.csv",
-            sep = ",", quote = FALSE, row.names = FALSE)
-
-################################################
-################################################
-## RUN DEXSeq for alternative promoter usage  ##
-################################################
-################################################
-library(DEXSeq)
-## Call DEXSeq - promoter as feature, gene as group
-dxd <- DEXSeqDataSet(countData = as.matrix(countData[,seq_len(length(condition))]),
-                     sampleData = data.frame(colData(result)),
-                     design = formula(~ sample + exon + condition:exon),
-                     featureID = as.factor(countData$promoterId),
-                     groupID = as.factor(countData$geneId))
-dxr1 <- DEXSeq(dxd)
-dxr1 <- data.frame(dxr1[,1:10]) %>% 
-  group_by(groupID) %>% 
-  mutate(minp = min(padj)) %>%
-  arrange(minp)
-write.table(dxr1, file = "DEXSeq_alt_promoter_usage_output.csv",
             sep = ",", quote = FALSE, row.names = FALSE)
