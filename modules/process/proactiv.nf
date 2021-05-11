@@ -16,6 +16,7 @@ process PROACTIV {
     
     input:
     path samplesheet
+    path gtf
     
     output:    
     path "*.csv"                , emit: proactiv_csv
@@ -24,7 +25,7 @@ process PROACTIV {
 
     script:
     """
-    run_proactiv.r --samplesheet=$samplesheet
+    run_proactiv.r --samplesheet=$samplesheet --annotation=$gtf
     Rscript -e "library(proActiv); write(x=as.character(packageVersion('proActiv')), file='proactiv.version.txt')"
     echo \$(R --version 2>&1) > r.version.txt
     """
