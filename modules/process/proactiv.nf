@@ -15,7 +15,8 @@ process PROACTIV {
     container "quay.io/biocontainers/bioconductor-proactiv:1.0.0--r40_1"
     
     input:
-    path samplesheet
+    path junction_file
+    path premade_annotation_rds
     
     output:    
     path "*.csv"                , emit: proactiv_csv
@@ -24,7 +25,7 @@ process PROACTIV {
 
     script:
     """
-    run_proactiv.r --samplesheet=$samplesheet
+    run_proactiv.r --junction_file=$junction_file --annotation=$premade_annotation_rds
     Rscript -e "library(proActiv); write(x=as.character(packageVersion('proActiv')), file='proactiv.version.txt')"
     echo \$(R --version 2>&1) > r.version.txt
     """

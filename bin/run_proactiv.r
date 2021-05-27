@@ -25,20 +25,16 @@ library(proActiv)
 ################################################
 args = commandArgs(trailingOnly=TRUE)
 
-samplesheet   <- strsplit(grep('--samplesheet*', args, value = TRUE), split = '=')[[1]][[2]]
-# annot_gtf      <- strsplit(grep('--annotation*', args, value = TRUE), split = '=')[[1]][[2]]
+junction_file <- strsplit(grep('--junction_file*', args, value = TRUE), split = '=')[[1]][[2]]
+annotation    <- strsplit(grep('--annotation*', args, value = TRUE), split = '=')[[1]][[2]]
 
 ################################################
 ################################################
 ## RUN proActiv                               ##
 ################################################
 ################################################
-sample_tab <- read.csv(samplesheet,header=TRUE)
-files <- sample_tab$input_file
-condition <- sample_tab$condition
-promoterAnnotation <- promoterAnnotation.gencode.v34.subset
-result <- proActiv(files = files, condition = condition,
-                   promoterAnnotation = promoterAnnotation)
+promoterAnnotation <- readRDS(annotation)
+result <- proActiv(files = junction_file, promoterAnnotation = promoterAnnotation)
 result <- result[complete.cases(assays(result)$promoterCounts),]
 result_tab <- rowData(result)
 str(result_tab)
